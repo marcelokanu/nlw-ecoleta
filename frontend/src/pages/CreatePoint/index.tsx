@@ -1,15 +1,15 @@
-import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
+import axios from "axios";
 
-import { Link, useHistory } from 'react-router-dom';
-import { FiArrowLeft } from 'react-icons/fi';
-import { Map, TileLayer, Marker } from 'react-leaflet';
-import { LeafletMouseEvent } from 'leaflet';
+import { Link, useHistory } from "react-router-dom";
+import { FiArrowLeft } from "react-icons/fi";
+import { Map, TileLayer, Marker } from "react-leaflet";
+import { LeafletMouseEvent } from "leaflet";
 
-import './styles.css';
+import "./styles.css";
 
-import logo from '../../assets/logo.svg';
-import api from '../../services/api';
+import logo from "../../assets/logo.svg";
+import api from "../../services/api";
 
 interface IItem {
   id: number;
@@ -25,61 +25,69 @@ interface IIbgeCityResponse {
   nome: string;
 }
 
-
-
 const CreatePoint = () => {
   const [items, setItems] = useState<IItem[]>([]);
   const [ufs, setUfs] = useState<string[]>([]);
   const [cities, setCities] = useState<string[]>([]);
 
-  const [initialMapPosition, setInitialMapPosition] = useState<[number, number]>([0,0])
+  const [initialMapPosition, setInitialMapPosition] = useState<
+    [number, number]
+  >([0, 0]);
 
   const [inputData, setInputData] = useState({
-    name: '',
-    email: '',
-    whatsapp: '',
-  })
+    name: "",
+    email: "",
+    whatsapp: "",
+  });
 
-  const [selectedUf, setSelectedUf] = useState('0');
-  const [selectedCity, setselectedCity] = useState('0');
-  
-  const [selectedMapPosition, setSelectedMapPosition] = useState<[number, number]>([0,0]);
+  const [selectedUf, setSelectedUf] = useState("0");
+  const [selectedCity, setselectedCity] = useState("0");
+
+  const [selectedMapPosition, setSelectedMapPosition] = useState<
+    [number, number]
+  >([0, 0]);
 
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
   const history = useHistory();
-  
+
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(position => {
+    navigator.geolocation.getCurrentPosition((position) => {
       const { latitude, longitude } = position.coords;
       setInitialMapPosition([latitude, longitude]);
-    })
-  },[])
+    });
+  }, []);
 
   useEffect(() => {
-    api.get('items').then(response => {
+    api.get("items").then((response) => {
       setItems(response.data);
     });
-  },[]);
+  }, []);
 
   useEffect(() => {
-    axios.get<IIbgeUfResponse[]>('https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome').then(response => {
-      const ufInitials = response.data.map(uf => uf.sigla);
-      setUfs(ufInitials);
-    });
-  },[]);
+    axios
+      .get<IIbgeUfResponse[]>(
+        "https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome"
+      )
+      .then((response) => {
+        const ufInitials = response.data.map((uf) => uf.sigla);
+        setUfs(ufInitials);
+      });
+  }, []);
 
   useEffect(() => {
-    if (selectedUf === '0') {
+    if (selectedUf === "0") {
       return;
     }
     axios
-      .get<IIbgeCityResponse[]>(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`)
-      .then(response => {
-        const cityNames = response.data.map(city => city.nome);
+      .get<IIbgeCityResponse[]>(
+        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`
+      )
+      .then((response) => {
+        const cityNames = response.data.map((city) => city.nome);
         setCities(cityNames);
       });
-  },[selectedUf])
+  }, [selectedUf]);
 
   function handleSelectUf(event: ChangeEvent<HTMLSelectElement>) {
     const uf = event.target.value;
@@ -92,41 +100,35 @@ const CreatePoint = () => {
   }
 
   function handleMapClick(event: LeafletMouseEvent) {
-    setSelectedMapPosition([
-      event.latlng.lat,
-      event.latlng.lng,
-    ])
+    setSelectedMapPosition([event.latlng.lat, event.latlng.lng]);
   }
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     setInputData({
-      ...inputData, 
-      [name]: value
+      ...inputData,
+      [name]: value,
     });
   }
 
   function handleSelectItem(id: number) {
-    const alreadySelected = selectedItems.findIndex(item => item === id);
+    const alreadySelected = selectedItems.findIndex((item) => item === id);
 
     if (alreadySelected >= 0) {
-      
-      const filteredItems = selectedItems.filter(item => item !== id);
+      const filteredItems = selectedItems.filter((item) => item !== id);
       setSelectedItems(filteredItems);
-
     } else {
-      
-      setSelectedItems([ ...selectedItems, id ]);
-    }    
+      setSelectedItems([...selectedItems, id]);
+    }
   }
 
-  async function handleSubmit (event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
     const { name, email, whatsapp } = inputData;
     const uf = selectedUf;
     const city = selectedCity;
-    const [latitude,longitude] = selectedMapPosition;
+    const [latitude, longitude] = selectedMapPosition;
     const items = selectedItems;
 
     const data = {
@@ -140,17 +142,16 @@ const CreatePoint = () => {
       items,
     };
 
-    await api.post('points', data);
+    await api.post("points", data);
 
-    alert('Ponto de coleta criado.');
-    history.push('/');
-    
+    alert("Ponto de coleta criado.");
+    history.push("/");
   }
 
   return (
     <div id="page-create-point">
       <header>
-        <img src={logo} alt="Ecoleta"/>
+        <img src={logo} alt="Ecoleta" />
 
         <Link to="/">
           <FiArrowLeft />
@@ -159,7 +160,9 @@ const CreatePoint = () => {
       </header>
 
       <form onSubmit={handleSubmit}>
-        <h1>Cadastro do <br/> ponto de coleta</h1>
+        <h1>
+          Cadastro do <br /> ponto de coleta
+        </h1>
 
         <fieldset>
           <legend>
@@ -169,9 +172,9 @@ const CreatePoint = () => {
 
         <div className="field">
           <label htmlFor="name">Nome da entidade</label>
-          <input 
+          <input
             type="text"
-            name="name"  
+            name="name"
             id="name"
             onChange={handleInputChange}
           />
@@ -179,67 +182,71 @@ const CreatePoint = () => {
 
         <div className="field-group">
           <div className="field">
-           <label htmlFor="email">E-mail</label>
-            <input 
+            <label htmlFor="email">E-mail</label>
+            <input
               type="text"
-              name="email"  
+              name="email"
               id="email"
               onChange={handleInputChange}
             />
           </div>
 
           <div className="field">
-           <label htmlFor="whatsapp">Whatsapp</label>
-            <input 
+            <label htmlFor="whatsapp">Whatsapp</label>
+            <input
               type="text"
-              name="whatsapp"  
+              name="whatsapp"
               id="whatsapp"
               onChange={handleInputChange}
             />
           </div>
         </div>
-        
+
         <fieldset>
           <legend>
             <h2>Endereço</h2>
             <span>Selecione o endereço no mapa</span>
           </legend>
 
-          <Map center={initialMapPosition} zoom={15} onclick={handleMapClick} >
-            <TileLayer 
+          <Map center={initialMapPosition} zoom={15} onclick={handleMapClick}>
+            <TileLayer
               attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <Marker position={selectedMapPosition} />
           </Map>
-          
+
           <div className="field-group">
             <div className="field">
               <label htmlFor="uf">Estado (UF)</label>
               <select
-                name="uf" 
+                name="uf"
                 id="uf"
-                onChange={handleSelectUf} 
-                value={selectedUf} 
+                onChange={handleSelectUf}
+                value={selectedUf}
               >
-               <option value="0">Selecione uma UF</option>
-                {ufs.map(uf => (
-                  <option key={uf} value={uf}>{uf}</option>
+                <option value="0">Selecione uma UF</option>
+                {ufs.map((uf) => (
+                  <option key={uf} value={uf}>
+                    {uf}
+                  </option>
                 ))}
               </select>
             </div>
             <div className="field">
               <label htmlFor="city">Cidade</label>
-              <select 
-                name="city" 
+              <select
+                name="city"
                 id="city"
                 value={selectedCity}
                 onChange={handleSelectCity}
               >
                 <option value="0">Selecione uma Cidade</option>
-                  {cities.map(city => (
-                    <option key={city} value={city}>{city}</option>
-                  ))}
+                {cities.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -251,17 +258,16 @@ const CreatePoint = () => {
             <span>Selecione um ou mais itens abaixo</span>
           </legend>
           <ul className="items-grid">
-            {items.map(item => (
-              <li 
-                key={item.id} 
+            {items.map((item) => (
+              <li
+                key={item.id}
                 onClick={() => handleSelectItem(item.id)}
-                className={selectedItems.includes(item.id) ? 'selected' : ''}
+                className={selectedItems.includes(item.id) ? "selected" : ""}
               >
-                <img src={item.image_url} alt={item.title}/>
+                <img src={item.image_url} alt={item.title} />
                 <span>{item.title}</span>
               </li>
             ))}
-           
           </ul>
         </fieldset>
 
@@ -269,6 +275,6 @@ const CreatePoint = () => {
       </form>
     </div>
   );
-}
+};
 
 export default CreatePoint;
