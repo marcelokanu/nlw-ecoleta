@@ -12,7 +12,7 @@ import {
 import { RectButton } from "react-native-gesture-handler";
 import { Feather as Icon } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import RNPickerSelect from "react-native-picker-select";
+import RNPickerSelect, { PickerStyle } from "react-native-picker-select";
 import axios from "axios";
 
 interface IIbgeUfResponse {
@@ -25,24 +25,35 @@ interface IIbgeCityResponse {
 
 const Home = () => {
   //Usando Input
-  const [uf, setUf] = useState('');
-  const [city, setCity] = useState('');
+  // const [uf, setUf] = useState("");
+  // const [city, setCity] = useState("");
 
-  const navigation = useNavigation();
-  
-  function handleNavigationToPoints() {
-    navigation.navigate('Points', {
-      uf,
-      city
-    });
-  };
+  // const navigation = useNavigation();
+
+  // function handleNavigationToPoints() {
+  //   navigation.navigate("Points", {
+  //     uf,
+  //     city,
+  //   });
+  // }
 
   //Usando Select
   const [ufs, setUfs] = useState<string[]>([]);
   const [cities, setCities] = useState<string[]>([]);
 
   const [selectedUf, setSelectedUf] = useState("0");
-  const [selectedCity, setselectedCity] = useState("0");
+  const [selectedCity, setSelectedCity] = useState("0");
+
+  const navigation = useNavigation();
+
+  function handleNavigationToPoints() {
+    navigation.navigate("Points", {
+      selectedUf,
+      selectedCity,
+    });
+  }
+
+
   useEffect(() => {
     axios
       .get<IIbgeUfResponse[]>(
@@ -53,6 +64,7 @@ const Home = () => {
         setUfs(ufInitials);
       });
   }, []);
+
   useEffect(() => {
     if (selectedUf === "0") {
       return;
@@ -67,18 +79,19 @@ const Home = () => {
       });
   }, [selectedUf]);
 
-  function handleSelectUf(event: ChangeEvent<HTMLSelectElement>) {
-    const uf = event.target.value;
+  function handleSelectUf(uf: string) {
     setSelectedUf(uf);
   }
 
-  function handleSelectCity(event: ChangeEvent<HTMLSelectElement>) {
-    const city = event.target.value;
-    setselectedCity(city);
+  function handleSelectCity(city: string) {
+    setSelectedCity(city);
   }
 
   return (
-    <KeyboardAvoidingView style={{flex:1}} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
       <ImageBackground
         source={require("../../assets/home-background.png")}
         style={styles.container}
@@ -91,14 +104,17 @@ const Home = () => {
               Seu marketplace de coleta de resíduos
             </Text>
             <Text style={styles.description}>
-              Ajudamos pessoas a encontrarem pontos de coleta de forma eficiente.
+              Ajudamos pessoas a encontrarem pontos de coleta de forma
+              eficiente.
             </Text>
           </View>
         </View>
 
         <View style={styles.footer}>
-          <TextInput 
-            style={styles.input} 
+
+
+          {/* <TextInput
+            style={styles.input}
             placeholder="Digite a UF"
             maxLength={2}
             autoCapitalize="characters"
@@ -106,29 +122,33 @@ const Home = () => {
             value={uf}
             onChangeText={setUf}
           />
-          <TextInput 
-            style={styles.input} 
+          <TextInput
+            style={styles.input}
             placeholder="Digite a Cidade"
             autoCorrect={false}
             value={city}
             onChangeText={setCity}
-          />
+          /> */}
 
           <RNPickerSelect
-            onValueChange={(value) => setUfs}
-            items={
-              [
-                { label: "SC", value: "SC" },
-                { label: "MS", value: "MS" },
-              ]
-            }
+            useNativeAndroidPickerStyle={false}
+            style={pickerStyle}
+            onValueChange={(value) => handleSelectUf(value)}
+            items={ufs.map((uf) => ({
+              key: uf,
+              label: uf,
+              value: uf,
+            }))}
           />
-            <RNPickerSelect
-            onValueChange={(value) => setUfs}
-            items={[
-              { label: "Rio do sul", value: "Rio do sul" },
-              { label: "São Gabriel do Oeste", value: "São Gabriel do Oeste" },
-            ]}
+          <RNPickerSelect
+            useNativeAndroidPickerStyle={false}
+            style={pickerStyle}
+            onValueChange={(value) => handleSelectCity(value)}
+            items={cities.map((city) => ({
+              key: city,
+              label: city,
+              value: city,
+            }))}
           />
 
           <RectButton style={styles.button} onPress={handleNavigationToPoints}>
@@ -146,6 +166,41 @@ const Home = () => {
 };
 
 export default Home;
+
+const pickerStyle = {
+  inputIOS: {
+    height: 60,
+    borderRadius: 10,
+    backgroundColor: "#FFF",
+    color: "#322153",
+    marginBottom: 8,
+    paddingHorizontal: 24,
+  },
+  inputAndroid: {
+    height: 60,
+    borderRadius: 10,
+    backgroundColor: "#FFF",
+    color: "#322153",
+    marginBottom: 8,
+    paddingHorizontal: 24,
+  },
+  placeholderColor: "white",
+  underline: { borderTopWidth: 0 },
+  icon: {
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    borderTopWidth: 5,
+    borderTopColor: '#00000099',
+    borderRightWidth: 5,
+    borderRightColor: 'transparent',
+    borderLeftWidth: 5,
+    borderLeftColor: 'transparent',
+    width: 0,
+    height: 0,
+    top: 20,
+    right: 15,
+  },
+};
 
 const styles = StyleSheet.create({
   container: {
