@@ -52,30 +52,43 @@ const Points = () => {
 
   useEffect(() => {
     async function loadPosition () {
-      const { status } = await Location.requestPermissionsAsync();
 
-      if (status !== 'granted') {
-        Alert.alert('Oooops...', 'Precisamos de sua permissão para obter a localização');
-        return;
-      }
 
-      const location = await Location.getCurrentPositionAsync();
+      if (routeParams.city !== null) {
+      
+      const gMapsLocation = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${routeParams.city},${routeParams.uf}&key=YOUR-API-KEY`);
 
-      const { latitude, longitude } = location.coords;
+      const gMapsLocationJson = await gMapsLocation.json();
 
       setInitialPosition([
-        latitude,
-        longitude
-      ])
+        gMapsLocationJson.results[0].geometry.location.lat,
+        gMapsLocationJson.results[0].geometry.location.lng,
+      ]);
+
+      } else {
+
+        const { status } = await Location.requestPermissionsAsync();
+
+        if (status !== 'granted') {
+          Alert.alert('Oooops...', 'Precisamos de sua permissão para obter a localização');
+          return;
+        }
+  
+        const location = await Location.getCurrentPositionAsync();
+  
+        const { latitude, longitude } = location.coords;
+  
+        setInitialPosition([
+          latitude,
+          longitude
+        ])
+      }
     }
 
     loadPosition();
   },[])
 
   useEffect(() => {
-    console.log(routeParams.city);
-    console.log(routeParams.uf);
-    console.log(selectedItems);
     api.get("points", {
       params: {
         city: routeParams.city,
@@ -84,7 +97,7 @@ const Points = () => {
       }
     }).then(response => {
       setPoints(response.data);
-      console.log(response.data);
+      
     })
   },[selectedItems])
 
@@ -131,8 +144,8 @@ const Points = () => {
             initialRegion={{
               latitude: initialPosition[0],
               longitude: initialPosition[1],
-              latitudeDelta: 0.014,
-              longitudeDelta: 0.014,
+              latitudeDelta: 0.015,
+              longitudeDelta: 0.015,
             }}
           >
            {points.map(point => (
