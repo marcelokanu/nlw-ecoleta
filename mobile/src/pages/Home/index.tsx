@@ -53,7 +53,6 @@ const Home = () => {
     });
   }
 
-
   useEffect(() => {
     axios
       .get<IIbgeUfResponse[]>(
@@ -111,8 +110,6 @@ const Home = () => {
         </View>
 
         <View style={styles.footer}>
-
-
           {/* <TextInput
             style={styles.input}
             placeholder="Digite a UF"
@@ -187,14 +184,14 @@ const pickerStyle = {
   placeholderColor: "white",
   underline: { borderTopWidth: 0 },
   icon: {
-    position: 'absolute',
-    backgroundColor: 'transparent',
+    position: "absolute",
+    backgroundColor: "transparent",
     borderTopWidth: 5,
-    borderTopColor: '#00000099',
+    borderTopColor: "#00000099",
     borderRightWidth: 5,
-    borderRightColor: 'transparent',
+    borderRightColor: "transparent",
     borderLeftWidth: 5,
-    borderLeftColor: 'transparent',
+    borderLeftColor: "transparent",
     width: 0,
     height: 0,
     top: 20,

@@ -15,13 +15,13 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import MapView, { Marker } from "react-native-maps";
 import { SvgUri } from "react-native-svg";
 import api from "../../services/api";
-import * as Location from 'expo-location';
+import * as Location from "expo-location";
 
 interface IItem {
   id: number;
   title: string;
   image_url: string;
-};
+}
 
 interface IPoint {
   id: number;
@@ -30,7 +30,7 @@ interface IPoint {
   image_url: string;
   latitude: number;
   longitude: number;
-};
+}
 
 interface IParams {
   uf: string;
@@ -48,58 +48,58 @@ const Points = () => {
   const route = useRoute();
   const routeParams = route.params as IParams;
 
-  const [initialPosition, setInitialPosition] =  useState<[number, number]>([0, 0])
+  const [initialPosition, setInitialPosition] = useState<[number, number]>([
+    0,
+    0,
+  ]);
 
   useEffect(() => {
-    async function loadPosition () {
-
-
+    async function loadPosition() {
       if (routeParams.city !== null) {
-      
-      const gMapsLocation = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${routeParams.city},${routeParams.uf}&key=YOUR-API-KEY`);
+        const gMapsLocation = await fetch(
+          `https://maps.googleapis.com/maps/api/geocode/json?address=${routeParams.city},${routeParams.uf}&key=YOUR-API-KEY`
+        );
+        const gMapsLocationJson = await gMapsLocation.json();
 
-      const gMapsLocationJson = await gMapsLocation.json();
-
-      setInitialPosition([
-        gMapsLocationJson.results[0].geometry.location.lat,
-        gMapsLocationJson.results[0].geometry.location.lng,
-      ]);
-
+        setInitialPosition([
+          gMapsLocationJson.results[0].geometry.location.lat,
+          gMapsLocationJson.results[0].geometry.location.lng,
+        ]);
       } else {
-
         const { status } = await Location.requestPermissionsAsync();
 
-        if (status !== 'granted') {
-          Alert.alert('Oooops...', 'Precisamos de sua permissão para obter a localização');
+        if (status !== "granted") {
+          Alert.alert(
+            "Oooops...",
+            "Precisamos de sua permissão para obter a localização"
+          );
           return;
         }
-  
+
         const location = await Location.getCurrentPositionAsync();
-  
+
         const { latitude, longitude } = location.coords;
-  
-        setInitialPosition([
-          latitude,
-          longitude
-        ])
+
+        setInitialPosition([latitude, longitude]);
       }
     }
 
     loadPosition();
-  },[])
+  }, []);
 
   useEffect(() => {
-    api.get("points", {
-      params: {
-        city: routeParams.city,
-        uf: routeParams.uf,
-        items: selectedItems
-      }
-    }).then(response => {
-      setPoints(response.data);
-      
-    })
-  },[selectedItems])
+    api
+      .get("points", {
+        params: {
+          city: routeParams.city,
+          uf: routeParams.uf,
+          items: selectedItems,
+        },
+      })
+      .then((response) => {
+        setPoints(response.data);
+      });
+  }, [selectedItems]);
 
   useEffect(() => {
     api.get("items").then((response) => {
@@ -138,37 +138,37 @@ const Points = () => {
         </Text>
 
         <View style={styles.mapContainer}>
-          { initialPosition[0] !== 0 && (
+          {initialPosition[0] !== 0 && (
             <MapView
-            style={styles.map}
-            initialRegion={{
-              latitude: initialPosition[0],
-              longitude: initialPosition[1],
-              latitudeDelta: 0.015,
-              longitudeDelta: 0.015,
-            }}
-          >
-           {points.map(point => (
-              <Marker
-              key={point.id}
-              onPress={() => handleNavigateToDetail(point.id)}
-              style={styles.mapMarker}
-              coordinate={{
-                latitude: point.latitude,
-                longitude: point.longitude,
+              style={styles.map}
+              initialRegion={{
+                latitude: initialPosition[0],
+                longitude: initialPosition[1],
+                latitudeDelta: 0.015,
+                longitudeDelta: 0.015,
               }}
             >
-              <View style={styles.mapMarkerContainer}>
-                <Image
-                  style={styles.mapMarkerImage}
-                  source={{ uri: point.image_url }}
-                />
-                <Text style={styles.mapMarkerTitle}>{point.name}</Text>
-              </View>
-            </Marker>
-           ))}
-          </MapView>
-          ) }
+              {points.map((point) => (
+                <Marker
+                  key={point.id}
+                  onPress={() => handleNavigateToDetail(point.id)}
+                  style={styles.mapMarker}
+                  coordinate={{
+                    latitude: point.latitude,
+                    longitude: point.longitude,
+                  }}
+                >
+                  <View style={styles.mapMarkerContainer}>
+                    <Image
+                      style={styles.mapMarkerImage}
+                      source={{ uri: point.image_url }}
+                    />
+                    <Text style={styles.mapMarkerTitle}>{point.name}</Text>
+                  </View>
+                </Marker>
+              ))}
+            </MapView>
+          )}
         </View>
       </View>
       <View style={styles.itemsContainer}>
@@ -178,19 +178,16 @@ const Points = () => {
           contentContainerStyle={{ paddingHorizontal: 20 }}
         >
           {items.map((item) => (
-            <TouchableOpacity 
+            <TouchableOpacity
               activeOpacity={0.6}
-              key={String(item.id)} 
+              key={String(item.id)}
               style={[
                 styles.item,
                 selectedItems.includes(item.id) ? styles.selectedItem : {},
-              ]} 
-              onPress={() => handleSelectItem(item.id)}>
-              <SvgUri
-                width={42}
-                height={42}
-                uri={item.image_url}
-              />
+              ]}
+              onPress={() => handleSelectItem(item.id)}
+            >
+              <SvgUri width={42} height={42} uri={item.image_url} />
               <Text style={styles.itemTitle}>{item.title}</Text>
             </TouchableOpacity>
           ))}

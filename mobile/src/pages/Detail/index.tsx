@@ -7,14 +7,13 @@ import {
   Image,
   Text,
   SafeAreaView,
-  Linking
+  Linking,
 } from "react-native";
 import { Feather as Icon, FontAwesome } from "@expo/vector-icons";
-import * as MailComposer from 'expo-mail-composer';
+import * as MailComposer from "expo-mail-composer";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { RectButton } from "react-native-gesture-handler";
 import api from "../../services/api";
-
 
 interface IParams {
   point_id: number;
@@ -29,41 +28,43 @@ interface IData {
     whatsapp: string;
     city: string;
     uf: string;
-  },
+  };
   items: {
     title: string;
   }[];
 }
 
 const Detail = () => {
-  const [data, setData] = useState<IData>({} as IData)
- 
+  const [data, setData] = useState<IData>({} as IData);
+
   const navigation = useNavigation();
-  
+
   const route = useRoute();
   const routeParams = route.params as IParams;
 
-  console.log(route.params)
+  console.log(route.params);
 
   useEffect(() => {
-    api.get(`points/${routeParams.point_id}`).then(response => {
+    api.get(`points/${routeParams.point_id}`).then((response) => {
       setData(response.data);
-    })
-  },[])
+    });
+  }, []);
 
   function handleNavigateBack() {
     navigation.goBack();
   }
 
   function handleWhatsapp() {
-    Linking.openURL(`whatsapp://send?phone=${data.point.whatsapp}&text=Olá, tenho interesse sobre coleta de resíduos`);
+    Linking.openURL(
+      `whatsapp://send?phone=${data.point.whatsapp}&text=Olá, tenho interesse sobre coleta de resíduos`
+    );
   }
 
   function handleComposeMail() {
     MailComposer.composeAsync({
-      subject: 'Interesse na coleta de resíduos',
+      subject: "Interesse na coleta de resíduos",
       recipients: [data.point.email],
-    })
+    });
   }
 
   if (!data.point) {
@@ -78,15 +79,19 @@ const Detail = () => {
         </TouchableOpacity>
         <Image
           style={styles.pointImage}
-          source={{uri: data.point.image_url}}
+          source={{ uri: data.point.image_url }}
         />
 
         <Text style={styles.pointName}>{data.point.name}</Text>
-        <Text style={styles.pointItems}>{data.items.map(item => item.title).join(', ')}</Text>
+        <Text style={styles.pointItems}>
+          {data.items.map((item) => item.title).join(", ")}
+        </Text>
 
         <View style={styles.address}>
           <Text style={styles.addressTitle}>Endereço</Text>
-          <Text style={styles.addressContent}>{data.point.city}, {data.point.uf}</Text>
+          <Text style={styles.addressContent}>
+            {data.point.city}, {data.point.uf}
+          </Text>
         </View>
       </View>
 
