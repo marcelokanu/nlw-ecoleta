@@ -50,10 +50,10 @@ App desenvolvido durante o evento Next Level Week da RocketSeat :rocket:
 
 3. Executar via terminal o comando `expo start` para iniciar a execução no Expo.
 
-<div style="display:flex; width:100%; justify-content: space-between">
+<center>
 <img src="frontend/src/assets/mobile1.jpg" alt="mobile1" height="400px">
   <img src="frontend/src/assets/mobile2.jpg" alt="mobile1" height="400px">
-</div
+</center>
 
 # Dúvidas?
 :mailbox_with_no_mail:[Marcelo Bonilla](https://www.linkedin.com/in/marcelobonilla/)
