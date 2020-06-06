@@ -1,3 +1,12 @@
+<p align="center">
+  <img src="https://img.shields.io/badge/Language-Typescript-blue" />
+</p>
+<p align="center">
+  <img src="https://img.shields.io/github/stars/marcelokanu/nlw-ecoleta" />
+  <img src="https://img.shields.io/github/forks/marcelokanu/nlw-ecoleta" />
+  <img src="https://img.shields.io/github/issues/marcelokanu/nlw-ecoleta" />
+</p>
+
 <img src="frontend/src/assets/ecoleta.png" alt="ecoleta" width="100%">
 
 
