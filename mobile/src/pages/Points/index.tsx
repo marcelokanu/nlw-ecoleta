@@ -74,7 +74,9 @@ const Points = () => {
 
   useEffect(() => {
     console.log(routeParams.city);
-    api.get('points', {
+    console.log(routeParams.uf);
+    console.log(selectedItems);
+    api.get("points", {
       params: {
         city: routeParams.city,
         uf: routeParams.uf,
