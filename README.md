@@ -17,26 +17,42 @@ App desenvolvido durante o evento Next Level Week da RocketSeat :rocket:
 - Google Maps Api
 
 # Instalação
-
 1. Git clone neste repositório
 
-2. Abrir o terminal
+# Backend
+1. Acessar via terminar a pasta do projeto `cd nlw-ecoleta/backend`
 
-3. Acessar a pasta do projeto `cd nlw-ecoleta`
+2. Executar via terminal o comando `npm install` para instalar as dependências.
 
-4. Executar via terminal o comando `yarn` para instalar as dependências
+3. Executar via terminal o comando `npm run knex:migrate` para criar a base de dados.
 
-5. Executar via terminal o comando `yarn start` para executar o projeto
+4. Executar via terminal o comando `npm run knex:seed` para gerar os itens.
 
-# Usabilidade
+5. Executar via terminal o comando `npm run dev` para iniciar o servidor.
 
-# Web
+6. http://localhost:3333
+
+# Frontend
+1. Acessar a pasta do projeto `cd nlw-ecoleta/frontend`
+
+2. Executar via terminal o comando `npm install` para instalar as dependências.
+
+3. Executar via terminal o comando `npm run start` para iniciar o servidor.
+
+4. http://localhost:3000
+
 <img src="frontend/src/assets/ecoleta-web.gif" alt="ecoleta" width="100%">
 
 # Mobile
-<div style="display:flex; justify-content: space-between">
-<img src="frontend/src/assets/mobile1.jpg" alt="mobile1" width="300px" height="400px">
-  <img src="frontend/src/assets/mobile2.jpg" alt="mobile1" width="300px" height="400px">
+1. Acessar a pasta do projeto `cd nlw-ecoleta/mobile`
+
+2. Executar via terminal o comando `npm install` para instalar as dependências.
+
+3. Executar via terminal o comando `expo start` para iniciar a execução no Expo.
+
+<div style="display:flex; width:100%; justify-content: space-between">
+<img src="frontend/src/assets/mobile1.jpg" alt="mobile1" height="400px">
+  <img src="frontend/src/assets/mobile2.jpg" alt="mobile1" height="400px">
 </div
 
 # Dúvidas?
