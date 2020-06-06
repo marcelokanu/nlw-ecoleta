@@ -11,7 +11,7 @@
 
 
 # Sobre o projeto
-App desenvolvido com a finalidade de conectar empresas e pessoas com intuíto de auxiliar a sociedade no descarte de materiais.
+App desenvolvido com a finalidade de conectar empresas e pessoas com o propósito de auxiliar a sociedade no descarte de materiais.
 
 
 App desenvolvido durante o evento Next Level Week da RocketSeat :rocket:
