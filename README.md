@@ -28,7 +28,7 @@ App desenvolvido durante o evento Next Level Week da RocketSeat :rocket:
 # Instalação
 1. Git clone neste repositório
 
-# Backend
+# :collision:Backend 
 1. Acessar via terminar a pasta do projeto `cd nlw-ecoleta/backend`
 
 2. Executar via terminal o comando `npm install` para instalar as dependências.
@@ -41,7 +41,7 @@ App desenvolvido durante o evento Next Level Week da RocketSeat :rocket:
 
 6. http://localhost:3333
 
-# Frontend
+# :exclamation:Frontend
 1. Acessar a pasta do projeto `cd nlw-ecoleta/frontend`
 
 2. Executar via terminal o comando `npm install` para instalar as dependências.
@@ -52,7 +52,7 @@ App desenvolvido durante o evento Next Level Week da RocketSeat :rocket:
 
 <img src="frontend/src/assets/ecoleta-web.gif" alt="ecoleta" width="100%">
 
-# Mobile
+# :sparkles:Mobile
 1. Acessar a pasta do projeto `cd nlw-ecoleta/mobile`
 
 2. Executar via terminal o comando `npm install` para instalar as dependências.
@@ -65,4 +65,4 @@ App desenvolvido durante o evento Next Level Week da RocketSeat :rocket:
 </p>
 
 # Dúvidas?
-:mailbox_with_no_mail:[Marcelo Bonilla](https://www.linkedin.com/in/marcelobonilla/)
+:family:[Marcelo Bonilla](https://www.linkedin.com/in/marcelobonilla/)
