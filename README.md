@@ -34,7 +34,7 @@ App desenvolvido durante o evento Next Level Week da RocketSeat :rocket:
 <img src="frontend/src/assets/ecoleta-web.gif" alt="ecoleta" width="100%">
 
 # Mobile
-<img src="frontend/src/assets/mobile1.png" alt="mobile1" width="300px"><img src="frontend/src/assets/mobile2.png" alt="mobile1" width="300px">
+<img src="frontend/src/assets/mobile1.jpg" alt="mobile1" width="300px"><img src="frontend/src/assets/mobile2.jpg" alt="mobile1" width="300px">
 
 # Dúvidas?
 :mailbox_with_no_mail:[Marcelo Bonilla](https://www.linkedin.com/in/marcelobonilla/)
